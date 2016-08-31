@@ -1,26 +1,26 @@
-// Records interactions on the app. Use replay.js to run the actions back
-
+// Test client that sends messages back after a delay
+var fs = require('fs');
 var WebSocket = require('ws');
 
-var _ = require('./constants');
-var JSOG = require('./../util/jsog');
+var _ = require('./../constants');
 
 var ID = Math.random();
+var startTime = new Date().getTime();
+
+var filename = process.argv[2] || '_actions.log';
+console.log('Recording actions at ', filename);
+
+fs.writeFileSync(filename, '', 'utf-8');
 
 var ws = new WebSocket('ws://' + _.SERVER + ':' + _.PORT);
-ws.on('open', () => console.log('Connection opened with server '));
+ws.on('open', () => console.log('Connected to server'));
 ws.on('message', (data, flags) => {
     var msg = JSON.parse(data);
     if (msg.type === _.MSG_EVENT && msg.origin !== ID) {
-        var decodedPayload = JSOG.parse(msg.payload);
-        console.log('Got Message from ', msg.origin, 'of type ', decodedPayload.topLevelType);
-        setTimeout(() => {
-            console.log('Echoing back message from ', msg.origin, ' of type ', decodedPayload.topLevelType);
-            ws.send(JSON.stringify({
-                type: _.MSG_EVENT,
-                origin: ID,
-                payload: msg.payload
-            }))
-        }, 5000);
+        fs.appendFileSync(filename, JSON.stringify({
+            time: new Date().getTime() - startTime,
+            origin: msg.origin,
+            payload: msg.payload
+        }) + ',\n');
     }
 });
