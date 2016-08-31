@@ -1,22 +1,27 @@
 import EventPluginRegistry from 'react/lib/EventPluginRegistry';
 import ReactNativeEventEmitter from 'react/lib/ReactNativeEventEmitter';
 
-import JSOG from './jsog';
+import JSOG from './util/jsog';
 
-import {SERVER, PORT, WS_PROTOCOL, MSG_ID, MSG_EVENT} from './constants';
+import {SERVER, PORT, MSG_ID, MSG_EVENT} from './constants';
 
 const ID = Math.random();
 
-export default class Plugin {
-    constructor() {
-        var ws = new WebSocket('ws://' + SERVER + ':' + PORT, WS_PROTOCOL);
-        ws.onopen = (e) => console.log('Socket Opened');
-        ws.onerror = (e) => console.log('Socket Error', e.message);
-        ws.onclose = (e) => console.log('Socket Closed', e.code, e.reason);
+const log = console.log.bind(console);
 
-        ws.onmessage = (({ data}) => this.handleMessage(data));
+class Plugin {
+    init(host = SERVER + ':' + PORT) {
+        return new Promise((resolve, reject) => {
+            var ws = new WebSocket('ws://' + host);
+            ws.onopen = (e) => resolve(e);
+            ws.onerror = (e) => reject(e);
 
-        this.send = msg => ws.send(JSON.stringify(msg));
+            ws.onclose = (e => log('Socked closed'));
+            ws.onmessage = (({data}) => this.handleMessage(data));
+
+            this.close = (code, data) => ws.close(code, data);
+            this.send = msg => ws.send(JSON.stringify(msg));
+        });
     }
 
     handleMessage(data) {
@@ -30,7 +35,7 @@ export default class Plugin {
     }
 
     extractEvents(topLevelType, nativeEventTarget, nativeEventParam) {
-        if (nativeEventParam.isMirrored){
+        if (nativeEventParam.isMirrored) {
             return;
         }
         let rootNodeID = nativeEventTarget._rootNodeID;
@@ -44,6 +49,19 @@ export default class Plugin {
     }
 }
 
-// TODO This is not the best way to inject plugins. Use public APIs instead
-// Use EventPluginRegistry._resetEvent() and then re-inject plugins in the order specified in ReactNativeDefaultInjection
-EventPluginRegistry.plugins.push(new Plugin());
+let plugin = new Plugin();
+let position = null;
+
+export default main = {
+    start(...args) {
+        return plugin.init(...args).then(() => {
+            // TODO This is not the best way to inject plugins. Use public APIs instead
+            // Use EventPluginRegistry._resetEvent() and then re-inject plugins in the order specified in ReactNativeDefaultInjection
+            position = EventPluginRegistry.plugins.push(plugin);
+        });
+    },
+    stop() {
+        plugin.stop();
+        EventPluginRegistry.plugins.splice(position - 1, 1);
+    }
+}

@@ -1,9 +1,9 @@
-// Test client that sends messages back after a delay
+// Records interactions on the app. Use replay.js to run the actions back
 
 var WebSocket = require('ws');
 
 var _ = require('./constants');
-var JSOG = require('./jsog');
+var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
 
