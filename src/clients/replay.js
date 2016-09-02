@@ -3,6 +3,7 @@ var fs = require('fs');
 var WebSocket = require('ws');
 
 var _ = require('./../constants');
+var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
 var startTime = new Date().getTime();
@@ -30,6 +31,7 @@ function sendMessage() {
         origin: ID,
         payload: actions[index].payload
     }));
-    console.log(index, 'Time: ', actions[index].time);
+    var event = JSOG.parse(actions[index].payload);
+    console.log(actions[index].time + ':' + event.topLevelType, event.rootNodeID);
     index++;
 }

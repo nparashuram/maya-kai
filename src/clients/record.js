@@ -3,6 +3,7 @@ var fs = require('fs');
 var WebSocket = require('ws');
 
 var _ = require('./../constants');
+var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
 var startTime = new Date().getTime();
@@ -17,8 +18,11 @@ ws.on('open', () => console.log('Connected to server'));
 ws.on('message', (data, flags) => {
     var msg = JSON.parse(data);
     if (msg.type === _.MSG_EVENT && msg.origin !== ID) {
+        var time = new Date().getTime() - startTime;
+        var event = JSON.parse(msg.payload);
+        console.log(time + ':' + event.topLevelType, event.rootNodeID);
         fs.appendFileSync(filename, JSON.stringify({
-            time: new Date().getTime() - startTime,
+            time: time,
             origin: msg.origin,
             payload: msg.payload
         }) + ',\n');
