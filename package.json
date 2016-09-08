@@ -16,6 +16,7 @@
   "author": "Parashuram <code@nparashuram.com>",
   "license": "MIT",
   "dependencies": {
+    "minimist": "^1.2.0",
     "ws": "^1.1.1"
   }
 }

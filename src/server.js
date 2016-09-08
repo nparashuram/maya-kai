@@ -1,4 +1,4 @@
-var _ = require('./constants');
+var _ = require('./config');
 var WebSocketServer = require('ws').Server
 
 var wss = new WebSocketServer({ port: _.PORT });
