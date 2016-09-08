@@ -3,7 +3,7 @@ import ReactNativeEventEmitter from 'react/lib/ReactNativeEventEmitter';
 
 import JSOG from './util/jsog';
 
-import {SERVER, PORT, MSG_ID, MSG_EVENT} from './constants';
+import {SERVER, PORT, MSG_ID, MSG_EVENT} from './config';
 
 const ID = Math.random();
 

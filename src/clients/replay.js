@@ -2,13 +2,13 @@
 var fs = require('fs');
 var WebSocket = require('ws');
 
-var _ = require('./../constants');
+var _ = require('./../config');
 var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
 var startTime = new Date().getTime();
 
-var filename = process.argv[2] || '_actions.log';
+var filename = _.ARGUMENTS[0] || '_actions.log';
 console.log('Replaying actions from ', filename);
 
 var actions = JSON.parse('[' + fs.readFileSync(filename, 'utf-8') + 'null]');

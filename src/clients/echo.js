@@ -2,7 +2,7 @@
 
 var WebSocket = require('ws');
 
-var _ = require('./../constants');
+var _ = require('./../config');
 var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
