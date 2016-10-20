@@ -1,7 +1,19 @@
-var _ = require('./config');
-var WebSocketServer = require('ws').Server
+#!/usr/bin/env node
 
-var wss = new WebSocketServer({ port: _.PORT });
+var config = require('./config');
+var WebSocketServer = require('ws').Server;
+var argv = require('minimist')(process.argv.slice(2), {
+  default: {
+    port: config.PORT,
+    server: config.SERVER,
+  },
+  alias: {
+    port: 'p',
+    server: 's',
+  },
+});
+
+var wss = new WebSocketServer({ port: argv.port });
 
 wss.on('connection', function (socket) {
   console.log('Client connected');
@@ -15,4 +27,4 @@ wss.broadcast = function broadcast(data) {
     client.send(data);
   });
 };
-console.log('Started WebSocket Broadcast Server at ' + _.SERVER + ':' + _.PORT);
+console.log('Started WebSocket Broadcast Server at ' + argv.server + ':' + argv.server);

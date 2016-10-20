@@ -2,17 +2,28 @@
 var fs = require('fs');
 var WebSocket = require('ws');
 
-var _ = require('./../config');
+var config = require('./../config');
+var argv = require('minimist')(process.argv.slice(2), {
+    default: {
+        port: config.PORT,
+        server: config.SERVER,
+    },
+    alias: {
+        port: 'p',
+        server: 's',
+    },
+});
+
 var JSOG = require('./../util/jsog');
 
 var ID = Math.random();
 var startTime = new Date().getTime();
 
-var filename = _.ARGUMENTS[0] || '_actions.log';
+var filename = argv[0] || '_actions.log';
 console.log('Replaying actions from ', filename);
 
 var actions = JSON.parse('[' + fs.readFileSync(filename, 'utf-8') + 'null]');
-var ws = new WebSocket('ws://' + _.SERVER + ':' + _.PORT);
+var ws = new WebSocket('ws://' + argv.server + ':' + argv.port);
 ws.on('open', () => {
     console.log('Starting to replay actions');
     sendMessage();
@@ -27,7 +38,7 @@ function sendMessage() {
     }
     setTimeout(sendMessage, actions[index + 1].time - actions[index].time);
     ws.send(JSON.stringify({
-        type: _.MSG_EVENT,
+        type: config.MSG_EVENT,
         origin: ID,
         payload: actions[index].payload
     }));
