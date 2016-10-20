@@ -1,13 +1,13 @@
 {
   "name": "maya-kai",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Gesture and user interaction sync library for ReactNative",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/server.js"
   },
   "bin": {
-    "maya-kai-server": "node src/server.js"
+    "maya-kai-server": "src/server.js"
   },
   "keywords": [
     "ReactNative",
