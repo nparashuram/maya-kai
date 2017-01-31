@@ -1,5 +1,5 @@
-import EventPluginRegistry from 'react/lib/EventPluginRegistry';
-import ReactNativeEventEmitter from 'react/lib/ReactNativeEventEmitter';
+import EventPluginRegistry from 'EventPluginRegistry';
+import ReactNativeEventEmitter from 'ReactNativeEventEmitter';
 
 import JSOG from './util/jsog';
 
@@ -52,6 +52,7 @@ class Plugin {
 let plugin = new Plugin();
 let position = null;
 
+console.log(EventPluginRegistry)
 export default main = {
     start(...args) {
         return plugin.init(...args).then(() => {

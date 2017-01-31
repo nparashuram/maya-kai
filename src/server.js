@@ -27,4 +27,4 @@ wss.broadcast = function broadcast(data) {
     client.send(data);
   });
 };
-console.log('Started WebSocket Broadcast Server at ' + argv.server + ':' + argv.server);
+console.log('Started WebSocket Broadcast Server at ' + argv.server + ':' + argv.port);
