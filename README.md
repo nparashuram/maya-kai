@@ -48,9 +48,9 @@ This modules comes with a set of utilities
 
 ### Record/Replay
 This is a client that lets you record and play back the gestures at a later time. To run this, start the server, add the client code to as described in the usage section. Start the ReactNative app.
-Then run `node_modules/src/clients/record.js [_actions.log]`. Perform actions on the ReactNative app and once you are done, hit `Ctrl+C` on the `record.js` process.
+Then run `node_modules/maya-kai/src/clients/record.js [_actions.log]`. Perform actions on the ReactNative app and once you are done, hit `Ctrl+C` on the `record.js` process.
 
-Then reload the ReactNative app and run `node_modules/src/clients/replay.js [_actions.log]`. The replay process will read the actions and send them back to the application.
+Then reload the ReactNative app and run `node_modules/maya-kai/src/clients/replay.js [_actions.log]`. The replay process will read the actions and send them back to the application.
 
 ### Delayed Echo
 The echo client listens to events, and send them back to the same app after a 5 second delay. Can be used to test actions like counters, etc. Typically useful to see if the setup works.
