@@ -1,5 +1,5 @@
-import EventPluginRegistry from 'EventPluginRegistry';
-import ReactNativeEventEmitter from 'ReactNativeEventEmitter';
+import EventPluginRegistry from 'react-native/Libraries/Renderer/src/renderers/shared/stack/event/EventPluginRegistry.js';
+import ReactNativeEventEmitter from 'react-native/Libraries/Renderer/src/renderers/native/ReactNativeEventEmitter.js';
 
 import JSOG from './util/jsog';
 
