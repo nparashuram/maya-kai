@@ -15,10 +15,16 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 var wss = new WebSocketServer({ port: argv.port });
 
+var socketUId = 1;
+
 wss.on('connection', function (socket) {
-  console.log('Client connected');
+  socket.id = socketUId++;
+  console.log('Client connected:[', socket.id, ']. Total clients:', wss.clients.length);
   socket.on('message', function (data, flags) {
     wss.broadcast(data);
+  });
+  socket.on('close', function () {
+    console.log('Client disconnected:[', socket.id, ']. Total clients:', wss.clients.length);
   });
 });
 
