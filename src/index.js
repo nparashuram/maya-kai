@@ -3,9 +3,9 @@ import ReactNativeEventEmitter from 'react-native/Libraries/Renderer/src/rendere
 
 import JSOG from './util/jsog';
 
-import {SERVER, PORT, MSG_ID, MSG_EVENT} from './config';
+import { SERVER, PORT, MSG_ID, MSG_EVENT, MSG_INIT } from './config';
 
-const ID = Math.random();
+let ID = null;
 
 const log = console.log.bind(console);
 
@@ -25,7 +25,12 @@ class Plugin {
     }
 
     handleMessage(data) {
-        let message = JSON.parse(data);
+        let message = {};
+        try { message = JSON.parse(data); } catch (e) { }
+        if (message.type === MSG_INIT) {
+            ID = message.ID;
+            return;
+        }
         if (message.origin === ID || message.type !== MSG_EVENT) {
             return;
         }
@@ -35,7 +40,7 @@ class Plugin {
     }
 
     extractEvents(topLevelType, nativeEventTarget, nativeEventParam) {
-        if (nativeEventParam.isMirrored) {
+        if (nativeEventParam.isMirrored || ID === null) {
             return;
         }
         let rootNodeID = nativeEventTarget._rootNodeID;

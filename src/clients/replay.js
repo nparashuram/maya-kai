@@ -18,8 +18,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 var JSOG = require('./../util/jsog');
 
-var ID = Math.random();
-var startTime = new Date().getTime();
+var ID = null;
 
 var filename = argv[0] || '_actions.log';
 console.log('Replaying actions from ', filename);
@@ -27,8 +26,18 @@ console.log('Replaying actions from ', filename);
 var actions = JSON.parse('[' + fs.readFileSync(filename, 'utf-8') + 'null]');
 var ws = new WebSocket('ws://' + argv.server + ':' + argv.port);
 ws.on('open', () => {
-    console.log('Starting to replay actions');
-    sendMessage();
+    console.log('Connected to server, waiting for ID from server');
+});
+
+ws.on('message', (data, flags) => {
+    var msg = {};
+    try { msg = JSON.parse(data); } catch (e) { }
+    if (msg.type === config.MSG_INIT) {
+        ID = msg.ID;
+        console.log('Starting to replay actions');
+        sendMessage();
+        return;
+    }
 });
 
 var index = 0;

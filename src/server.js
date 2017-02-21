@@ -15,16 +15,19 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 var wss = new WebSocketServer({ port: argv.port });
 
-var socketUId = 1;
+var socketUId = 0;
 
 wss.on('connection', function (socket) {
-  socket.id = socketUId++;
-  console.log('Client connected:[', socket.id, ']. Total clients:', wss.clients.length);
+  socket.id = 'client-' + (++socketUId);
+  socket.send(JSON.stringify({ type: config.MSG_INIT, ID: socket.id }), function (err, res) {
+    console.log('🔗  Client connected:[', socket.id, ']. Total clients:', wss.clients.length);
+  });
+
   socket.on('message', function (data, flags) {
     wss.broadcast(data);
   });
   socket.on('close', function () {
-    console.log('Client disconnected:[', socket.id, ']. Total clients:', wss.clients.length);
+    console.log('💔  Client disconnected:[', socket.id, ']. Total clients:', wss.clients.length);
   });
 });
 

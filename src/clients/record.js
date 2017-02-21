@@ -18,7 +18,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 var JSOG = require('./../util/jsog');
 
-var ID = Math.random();
+var ID = null;
 var startTime = new Date().getTime();
 
 var filename = argv[0] || '_actions.log';
@@ -29,7 +29,12 @@ fs.writeFileSync(filename, '', 'utf-8');
 var ws = new WebSocket('ws://' + argv.server + ':' + argv.port);
 ws.on('open', () => console.log('Connected to server'));
 ws.on('message', (data, flags) => {
-    var msg = JSON.parse(data);
+    var msg = {};
+    try { msg = JSON.parse(data); } catch (e) { }
+    if (msg.type === config.MSG_INIT) {
+        ID = msg.ID;
+        return;
+    }
     if (msg.type === config.MSG_EVENT && msg.origin !== ID) {
         var time = new Date().getTime() - startTime;
         var event = JSON.parse(msg.payload);
