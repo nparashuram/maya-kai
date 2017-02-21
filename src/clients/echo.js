@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // Test client that sends messages back after a delay
 
 var WebSocket = require('ws');
