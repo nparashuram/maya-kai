@@ -52,7 +52,6 @@ class Plugin {
 let plugin = new Plugin();
 let position = null;
 
-console.log(EventPluginRegistry)
 export default main = {
     start(...args) {
         return plugin.init(...args).then(() => {
