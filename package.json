@@ -1,6 +1,6 @@
 {
   "name": "maya-kai",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "Gesture and user interaction sync library for ReactNative",
   "main": "src/index.js",
   "scripts": {
