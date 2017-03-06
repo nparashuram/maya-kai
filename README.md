@@ -35,8 +35,12 @@ If the server is started on a different server or port, it can be passed to the 
 
 ```javascript
 import MK from 'maya-kai';
-MK.start('myserver.com:8088').then(successCallback, errorCallback)
+MK.start('myserver.com:8088', {}).then(successCallback, errorCallback)
 ```
+
+The second parameter to `MK.start` is an options object, that can takae the following keys
+
+- `ignoredEvents`: An array to `topLevelEvent` items that should be ignored and NOT sent to other devices. By default, `topLayout` is ignored and not sent to other devices. To send ALL events, simply set `{ignoredEvents: []}`
 
 ## Troubleshooting
 If you see a "_Yellow BOX_" warning on the ReactNative application, it means that the app was not able to connect to the Maya-Kai server. Check if you have run `adb reverse`, or are able to access the server URL from a browser on the device.

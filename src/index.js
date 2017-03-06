@@ -8,16 +8,20 @@ import { SERVER, PORT, MSG_ID, MSG_EVENT, MSG_INIT } from './config';
 let ID = null;
 
 const log = console.log.bind(console);
+const defaultConfig = {
+    ignoredEvents: ['topLayout']
+};
 
 class Plugin {
-    init(host = SERVER + ':' + PORT) {
+    init(host = SERVER + ':' + PORT, options = {}) {
         return new Promise((resolve, reject) => {
+            this.configOptions = options;
             var ws = new WebSocket('ws://' + host);
             ws.onopen = (e) => resolve(e);
             ws.onerror = (e) => reject(e);
 
             ws.onclose = (e => log('Socked closed'));
-            ws.onmessage = (({data}) => this.handleMessage(data));
+            ws.onmessage = (({ data }) => this.handleMessage(data));
 
             this.close = (code, data) => ws.close(code, data);
             this.send = msg => ws.send(JSON.stringify(msg));
@@ -40,7 +44,8 @@ class Plugin {
     }
 
     extractEvents(topLevelType, nativeEventTarget, nativeEventParam) {
-        if (nativeEventParam.isMirrored || ID === null) {
+        let ignoredEvents = this.configOptions.ignoredEvents || defaultConfig.ignoredEvents;
+        if (nativeEventParam.isMirrored || ID === null || ignoredEvents.indexOf(topLevelType) !== -1) {
             return;
         }
         let rootNodeID = nativeEventTarget._rootNodeID;
