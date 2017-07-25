@@ -1,6 +1,11 @@
-import EventPluginRegistry from 'react-native/Libraries/Renderer/src/renderers/shared/stack/event/EventPluginRegistry.js';
-import ReactNativeEventEmitter from 'react-native/Libraries/Renderer/src/renderers/native/ReactNativeEventEmitter.js';
+// These imports are no longer valid for ReactNative@0.46 and above, since the files are not visible
+// Run ../patch.js to patch react native so that these are available.
 
+//import EventPluginRegistry from 'react-native/Libraries/Renderer/src/renderers/shared/stack/event/EventPluginRegistry.js';
+var EventPluginRegistry = global.__MK__EventPluginRegistry;
+
+//import ReactNativeEventEmitter from 'react-native/Libraries/Renderer/src/renderers/native/ReactNativeEventEmitter.js';
+var ReactNativeEventEmitter = global.__MK__ReactNativeEventEmitter;
 import JSOG from './util/jsog';
 
 import { SERVER, PORT, MSG_ID, MSG_EVENT, MSG_INIT } from './config';

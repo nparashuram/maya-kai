@@ -7,7 +7,7 @@ Can also be used for recording and then replaying user interactions.
 ReactNative uses React's EventPluginHub and this module adds an additional plugin to listen to events and send them to a server. The server broadcasts these events to all other connected clients, enabling mirroring of gestures.
 
 ## Usage
-1. Install the package using `npm install maya-kai` inside your ReactNative applications
+1. Install the package using `npm install maya-kai` inside your ReactNative applications.If you are running React-Native@0.46, you may need to patch ReactNative. Run `node ./node_modules/maya-kai/patch.js` to expose the functions needed for listening to events.
 
 2. _Server _- Start the server at port 8082 using `node_modules/.bin/maya-kai-server`.  Note that this server should be accessible to the device and you may need to do `adb reverse tcp:8082 tcp:8082` for Android.
 
